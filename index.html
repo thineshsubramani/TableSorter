@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+  <input type="text" id="userid" value="1" readonly>
+  <input type="text" id="username"  placeholder="UserName">
+  <input type="text" id="useroccupation"  placeholder="UserOccupation">
+  <button onclick="add();">Add</button><br><br>
+
+ 
+  <label for="sort">Sort by: </label>
+  <select name="sorter" id="sort" onchange="sorter();">
+    <option value="userId">UserID</option>
+    <option value="username">UserName</option>
+    <option value="Useroccupation">UserOccupation</option>
+  </select>
+  <br><br>
+
+<table id ="myTable" style="width:200px"></table>
+
+<style type="text/css">
+	  table {
+      border-collapse: collapse;
+      border-spacing: 1;
+      }
+      table tr th {
+        border: solid 1px #aaa999;
+      }
+      table tr td {
+        border: solid 1px ;
+      }  
+</style>
+
+
+<script type="text/javascript">
+//array list to store all information
+var data = [];
+
+function add(){
+   //Retrieving input values
+    var userid= document.getElementById('userid').value;
+    var username= document.getElementById('username').value;
+    var useroccupation= document.getElementById('useroccupation').value;
+
+    
+    if(username != "" && useroccupation!=""){
+	//info object to store collection of data
+	var info = {'id':userid,'name':username,'occupation':useroccupation} 
+	//push to the array list
+	data.push(info)
+    //Dynamically build table
+    buildTable(data)
+    //Incrementing the userID once builded the table
+    document.getElementById('userid').value = ++userid;
+    
+    }else{ alert("Please complete the form !")}
+}
+	
+
+
+function sorter(){
+	var selectBox = document.getElementById("sort");
+	//Get seleted value
+    var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+   
+   // Sorting 
+    sortbyID = data.sort(function(a,b){
+    
+    //Sort based on the selected value
+    	
+    if(selectedValue == "userId"){ 	
+    return a.id - b.id;
+    }else if(selectedValue=="username"){
+    return a.name - b.name;
+    }else if(selectedValue=="Useroccupation"){
+    return a.occupation - b.occupation;
+    }
+    });
+    //Rebuild table after sortinng
+    buildTable(sortbyID);
+}
+
+
+function buildTable(data){
+	//Build table by extracting data from arraylist
+	var table = document.getElementById('myTable')
+	table.innerHTML = ''
+	for (var i = 0; i < data.length; i++){
+		var row = `<tr>
+				<td>${data[i].id}</td>
+				<td>${data[i].name}</td>
+				<td>${data[i].occupation}</td>
+					  </tr>`
+		table.innerHTML += row
+
+		}
+	}
+</script>
+</body>
+</html>
